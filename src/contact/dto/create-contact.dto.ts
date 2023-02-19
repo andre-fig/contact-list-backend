@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger/dist/decorators/api-property.decora
 import { ContactType } from './contact-type.enum';
 
 export class CreateContactDto {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   personId: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: ContactType, enumName: 'ContactType', example: 'phone' })
   type: ContactType;
 
-  @ApiProperty()
+  @ApiProperty({ example: '123456789' })
   value: string;
 }

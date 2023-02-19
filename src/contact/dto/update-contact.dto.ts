@@ -3,6 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CreateContactDto } from './create-contact.dto';
 
 export class UpdateContactDto extends PartialType(CreateContactDto) {
-  @ApiProperty()
+  @ApiProperty({ example: 'john.doe@example.com' })
   value: string;
 }
