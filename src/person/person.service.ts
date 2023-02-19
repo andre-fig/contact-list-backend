@@ -48,13 +48,15 @@ export class PersonService {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<string> {
     const person = await this.personRepository.findOne({ where: { id } });
 
     if (!person) {
       throw new NotFoundException('Person not found');
     }
 
-    return await this.personRepository.delete(id);
+    await this.personRepository.remove(person);
+
+    return 'Person deleted';
   }
 }

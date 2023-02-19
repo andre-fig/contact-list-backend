@@ -77,7 +77,7 @@ export class PersonController {
   async update(
     @Param('id') id: number,
     @Body() updatePersonDto: UpdatePersonDto,
-  ) {
+  ): Promise<Person> {
     if (!id) {
       throw new BadRequestException('Id is required');
     }
@@ -92,7 +92,7 @@ export class PersonController {
   })
   @ApiBadRequestResponse({ description: 'Id is required' })
   @ApiNotFoundResponse({ description: 'Person not found' })
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<string> {
     if (!id) {
       throw new BadRequestException('Id is required');
     }
