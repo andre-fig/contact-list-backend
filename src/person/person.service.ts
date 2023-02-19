@@ -1,5 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ContactService } from '../contact/contact.service';
 import { Repository } from 'typeorm';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
@@ -10,6 +16,9 @@ export class PersonService {
   constructor(
     @InjectRepository(Person)
     private readonly personRepository: Repository<Person>,
+
+    @Inject(forwardRef(() => ContactService))
+    private readonly contactService: ContactService,
   ) {}
 
   async create(createPersonDto: CreatePersonDto): Promise<Person> {
@@ -45,10 +54,10 @@ export class PersonService {
   }
 
   async remove(id: number): Promise<string> {
-    await this.findOne(id);
+    await this.contactService.removeByPersonId(id);
 
     await this.personRepository.delete(id);
 
-    return 'Person deleted';
+    return 'Person and contacts deleted';
   }
 }

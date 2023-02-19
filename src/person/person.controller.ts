@@ -85,7 +85,7 @@ export class PersonController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a person by id' })
+  @ApiOperation({ summary: 'Delete a person and contacts by id' })
   @ApiOkResponse({
     description: 'The person has been successfully deleted',
     type: Person,

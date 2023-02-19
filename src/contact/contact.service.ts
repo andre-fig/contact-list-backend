@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PersonService } from 'src/person/person.service';
+import { PersonService } from '../person/person.service';
 import { Repository } from 'typeorm';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -12,6 +17,7 @@ export class ContactService {
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
 
+    @Inject(forwardRef(() => PersonService))
     private readonly personService: PersonService,
   ) {}
 
