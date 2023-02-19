@@ -36,11 +36,7 @@ export class PersonService {
   }
 
   async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
-    const person = await this.personRepository.findOne({ where: { id } });
-
-    if (!person) {
-      throw new NotFoundException('Person not found');
-    }
+    await this.findOne(id);
 
     return await this.personRepository.save({
       id,
@@ -49,13 +45,9 @@ export class PersonService {
   }
 
   async remove(id: number): Promise<string> {
-    const person = await this.personRepository.findOne({ where: { id } });
+    await this.findOne(id);
 
-    if (!person) {
-      throw new NotFoundException('Person not found');
-    }
-
-    await this.personRepository.remove(person);
+    await this.personRepository.delete(id);
 
     return 'Person deleted';
   }

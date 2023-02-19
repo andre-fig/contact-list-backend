@@ -1,26 +1,105 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PersonService } from 'src/person/person.service';
+import { Repository } from 'typeorm';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { Contact } from './entities/contact.entity';
 
 @Injectable()
 export class ContactService {
-  create(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  constructor(
+    @InjectRepository(Contact)
+    private readonly contactRepository: Repository<Contact>,
+
+    private readonly personService: PersonService,
+  ) {}
+
+  async create(createContactDto: CreateContactDto): Promise<Contact> {
+    const { type, value, personId } = createContactDto;
+
+    const person = await this.personService.findOne(personId);
+
+    const newContact = this.contactRepository.create({
+      type,
+      value,
+      person,
+    });
+
+    return await this.contactRepository.save(newContact);
   }
 
-  findAll() {
-    return `This action returns all contact`;
+  async findAll(): Promise<Contact[]> {
+    const contacts = await this.contactRepository.find({
+      relations: ['person'],
+    });
+
+    if (!contacts) {
+      throw new NotFoundException('No contact found');
+    }
+
+    return contacts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  async findOne(id: number): Promise<Contact> {
+    const contact = await this.contactRepository.findOne({
+      where: { id },
+      relations: ['person'],
+    });
+
+    if (!contact) {
+      throw new NotFoundException('Contact not found');
+    }
+
+    return contact;
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  async update(
+    id: number,
+    updateContactDto: UpdateContactDto,
+  ): Promise<Contact> {
+    const { type, value } = updateContactDto;
+
+    await this.findOne(id);
+
+    return this.contactRepository.save({
+      id,
+      type,
+      value,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
+  async remove(id: number): Promise<string> {
+    await this.findOne(id);
+
+    await this.contactRepository.delete(id);
+
+    return 'Contact deleted';
+  }
+
+  async removeByPersonId(personId: number): Promise<string> {
+    await this.personService.findOne(personId);
+
+    await this.contactRepository.find({
+      where: { person: { id: personId } },
+    });
+
+    await this.contactRepository.delete({ person: { id: personId } });
+
+    return 'Contacts deleted';
+  }
+
+  async findByPersonId(personId: number): Promise<Contact[]> {
+    await this.personService.findOne(personId);
+
+    const contacts = await this.contactRepository.find({
+      where: { person: { id: personId } },
+    });
+
+    if (!contacts) {
+      throw new NotFoundException('No contact found');
+    }
+
+    return contacts;
   }
 }

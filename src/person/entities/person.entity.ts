@@ -23,23 +23,6 @@ export class Person {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({
-    type: Contact,
-    isArray: true,
-    example: [
-      {
-        id: 1,
-        type: 'email',
-        value: 'john.doe@email.com',
-      },
-      {
-        id: 2,
-        type: 'phone',
-        value: '1234567890',
-      },
-    ],
-    description: 'The contacts of a person',
-  })
   @OneToMany(() => Contact, (contact) => contact.person)
   contacts: Contact[];
 }
