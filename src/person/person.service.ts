@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { Person } from './entities/person.entity';
 
 @Injectable()
 export class PersonService {
-  create(createPersonDto: CreatePersonDto) {
-    return 'This action adds a new person';
+  constructor(
+    @InjectRepository(Person)
+    private readonly personRepository: Repository<Person>,
+  ) {}
+
+  async create(createPersonDto: CreatePersonDto): Promise<Person> {
+    const newPerson = this.personRepository.create(createPersonDto);
+    return await this.personRepository.save(newPerson);
   }
 
-  findAll() {
-    return `This action returns all person`;
+  async findAll(): Promise<Person[]> {
+    const people = await this.personRepository.find();
+    if (!people) {
+      throw new NotFoundException('No person found');
+    }
+    return people;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
+  async findOne(id: number): Promise<Person> {
+    const person = await this.personRepository.findOne({
+      where: { id },
+    });
+    if (!person) {
+      throw new NotFoundException('Person not found');
+    }
+    return person;
   }
 
-  update(id: number, updatePersonDto: UpdatePersonDto) {
-    return `This action updates a #${id} person`;
+  async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
+    const person = await this.personRepository.findOne({ where: { id } });
+
+    if (!person) {
+      throw new NotFoundException('Person not found');
+    }
+
+    return await this.personRepository.save({
+      id,
+      ...updatePersonDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} person`;
+  async remove(id: number) {
+    const person = await this.personRepository.findOne({ where: { id } });
+
+    if (!person) {
+      throw new NotFoundException('Person not found');
+    }
+
+    return await this.personRepository.delete(id);
   }
 }
