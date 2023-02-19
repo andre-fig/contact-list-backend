@@ -12,11 +12,11 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger/dist';
 import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
 import {
   ApiBadRequestResponse,
-  ApiNotAcceptableResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
 } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 import { ContactService } from './contact.service';
+import { ContactType } from './dto/contact-type.enum';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { Contact } from './entities/contact.entity';
@@ -35,7 +35,7 @@ export class ContactController {
   @ApiBadRequestResponse({
     description: 'Type, value and personId are required',
   })
-  @ApiNotAcceptableResponse({
+  @ApiNotFoundResponse({
     description: 'The personId does not exist',
   })
   async create(@Body() createContactDto: CreateContactDto): Promise<Contact> {
@@ -43,6 +43,10 @@ export class ContactController {
 
     if (!type || !value || !personId) {
       throw new BadRequestException('Type, value and personId are required');
+    }
+
+    if (!Object.values(ContactType).includes(type)) {
+      throw new BadRequestException('Type is not valid');
     }
 
     return await this.contactService.create(createContactDto);
@@ -89,6 +93,7 @@ export class ContactController {
     if (!id) {
       throw new BadRequestException('Id is required');
     }
+
     return await this.contactService.update(+id, updateContactDto);
   }
 

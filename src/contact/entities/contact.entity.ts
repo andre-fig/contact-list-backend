@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
+import { ContactType } from '../dto/contact-type.enum';
 
 @Entity()
 export class Contact {
@@ -14,9 +15,13 @@ export class Contact {
   @IsNotEmpty()
   id: number;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: ContactType,
+    default: ContactType.Phone,
+  })
   @IsNotEmpty()
-  type: string;
+  type: ContactType;
 
   @Column()
   @IsNotEmpty()

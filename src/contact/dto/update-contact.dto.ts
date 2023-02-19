@@ -4,8 +4,5 @@ import { CreateContactDto } from './create-contact.dto';
 
 export class UpdateContactDto extends PartialType(CreateContactDto) {
   @ApiProperty()
-  type: string;
-
-  @ApiProperty()
   value: string;
 }
