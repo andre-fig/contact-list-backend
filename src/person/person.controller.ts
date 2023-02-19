@@ -88,7 +88,6 @@ export class PersonController {
   @ApiOperation({ summary: 'Delete a person and contacts by id' })
   @ApiOkResponse({
     description: 'The person has been successfully deleted',
-    type: Person,
   })
   @ApiBadRequestResponse({ description: 'Id is required' })
   @ApiNotFoundResponse({ description: 'Person not found' })

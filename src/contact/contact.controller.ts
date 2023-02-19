@@ -101,11 +101,10 @@ export class ContactController {
   @ApiOperation({ summary: 'Delete a contact by id' })
   @ApiOkResponse({
     description: 'The contact has been successfully deleted',
-    type: Contact,
   })
   @ApiBadRequestResponse({ description: 'Id is required' })
   @ApiNotFoundResponse({ description: 'Contact not found' })
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<string> {
     if (!id) {
       throw new BadRequestException('Id is required');
     }
@@ -131,11 +130,10 @@ export class ContactController {
   @ApiOperation({ summary: 'Delete all contacts by personId' })
   @ApiOkResponse({
     description: 'The contacts have been successfully deleted',
-    type: [Contact],
   })
   @ApiBadRequestResponse({ description: 'Id is required' })
   @ApiNotFoundResponse({ description: 'Person not found' })
-  async removeByPersonId(@Param('id') id: number) {
+  async removeByPersonId(@Param('id') id: number): Promise<string> {
     if (!id) {
       throw new BadRequestException('Id is required');
     }
