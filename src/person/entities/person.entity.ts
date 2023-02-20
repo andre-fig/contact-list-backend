@@ -23,6 +23,15 @@ export class Person {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    type: Date,
+    example: '2021-01-01',
+    description: 'The date of birth of a person',
+    nullable: true,
+  })
+  @Column({ nullable: true })
+  birthDate: Date;
+
   @OneToMany(() => Contact, (contact) => contact.person)
   contacts: Contact[];
 }
