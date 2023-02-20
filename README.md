@@ -1,73 +1,87 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# REST API for managing people and contacts
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a REST API built using Node.js, NestJS, TypeScript, TypeORM and Swagger that allows users to create, update, get and delete people and their contacts. A person can have multiple contacts such as phone, email or whatsapp.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Getting Started
 
-## Description
+### Installation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. Clone the repository
 
-## Installation
-
-```bash
-$ npm install
+```
+git clone https://github.com/andre-fig/contact-list-backend.git
 ```
 
-## Running the app
+2. Navigate to the project directory
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+cd contact-list-backend
 ```
 
-## Test
+3. Copy the example environment file to `.env`:
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+cp .env.example .env
 ```
 
-## Support
+Update the `.env` file with your own environment variables.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+4. Install dependencies
 
-## Stay in touch
+```
+npm install
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Running the App
 
-## License
+To run the app, use the following command:
 
-Nest is [MIT licensed](LICENSE).
+```
+npm run start
+```
+
+### Swagger
+
+The Swagger UI is located at `/api`. It provides a user interface for interacting with the API endpoints.
+
+## Endpoints
+
+The following endpoints are available:
+
+| Endpoint              | Method | Description                              |
+| --------------------- | ------ | ---------------------------------------- |
+| `/person`             | POST   | Create a new person.                     |
+| `/person`             | GET    | Get a list of all people.                |
+| `/person/:id`         | GET    | Get a person by ID.                      |
+| `/person/:id`         | PATCH  | Update a person.                         |
+| `/person/:id`         | DELETE | Delete a person.                         |
+| `/contact`            | POST   | Create a new contact.                    |
+| `/contact`            | GET    | Get a list of all contacts.              |
+| `/contact/:id`        | GET    | Get a contact by ID.                     |
+| `/contact/:id`        | PATCH  | Update a contact.                        |
+| `/contact/:id`        | DELETE | Delete a contact.                        |
+| `/person/:id/contact` | GET    | Get a list of all contacts for a person. |
+| `/person/:id/contact` | DELETE | Delete all contacts for a person.        |
+
+## Data Models
+
+### Person
+
+| Field     | Type    | Description                       |
+| --------- | ------- | --------------------------------- |
+| id        | integer | Unique identifier for the person. |
+| name      | string  | Name of the person.               |
+| birthDate | date    | Date of birth of the person.      |
+
+### Contact
+
+| Field    | Type    | Description                                |
+| -------- | ------- | ------------------------------------------ |
+| id       | integer | Unique identifier for the contact.         |
+| type     | string  | Type of contact (e.g. email, phone, etc.). |
+| value    | string  | Value of the contact.                      |
+| personId | integer | ID of the person the contact belongs to.   |
+
+## Contributions
+
+Contributions to the project are welcome. Please fork the repository, make changes, and submit a pull request.
