@@ -83,23 +83,10 @@ export class ContactService {
     return 'Contact deleted';
   }
 
-  async removeByPersonId(personId: number): Promise<string> {
-    await this.personService.findOne(personId);
-
-    await this.contactRepository.find({
-      where: { person: { id: personId } },
-    });
-
-    await this.contactRepository.delete({ person: { id: personId } });
-
-    return 'Contacts deleted';
-  }
-
   async findByPersonId(personId: number): Promise<Contact[]> {
-    await this.personService.findOne(personId);
-
     const contacts = await this.contactRepository.find({
       where: { person: { id: personId } },
+      relations: ['person'],
     });
 
     if (!contacts) {
@@ -107,5 +94,13 @@ export class ContactService {
     }
 
     return contacts;
+  }
+
+  async removeByPersonId(personId: number): Promise<string> {
+    await this.findByPersonId(personId);
+
+    await this.contactRepository.delete({ person: { id: personId } });
+
+    return 'Contacts deleted';
   }
 }

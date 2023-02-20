@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
+import { Contact } from 'src/contact/entities/contact.entity';
 
 @Injectable()
 export class PersonService {
@@ -59,5 +60,19 @@ export class PersonService {
     await this.personRepository.delete(id);
 
     return 'Person and contacts deleted';
+  }
+
+  async findContacts(personId: number): Promise<Contact[]> {
+    await this.findOne(personId);
+
+    return await this.contactService.findByPersonId(personId);
+  }
+
+  async removeContacts(personId: number): Promise<string> {
+    await this.findOne(personId);
+
+    await this.contactService.removeByPersonId(personId);
+
+    return 'Contacts deleted';
   }
 }

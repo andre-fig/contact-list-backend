@@ -105,33 +105,4 @@ export class ContactController {
     }
     return await this.contactService.remove(+id);
   }
-
-  @Get('/person/:id')
-  @ApiOperation({ summary: 'Get all contacts by personId' })
-  @ApiOkResponse({
-    description: 'The contacts have been successfully retrieved',
-    type: [Contact],
-  })
-  @ApiBadRequestResponse({ description: 'Id is required' })
-  @ApiNotFoundResponse({ description: 'Person or contact not found' })
-  async findByPersonId(@Param('id') id: number): Promise<Contact[]> {
-    if (!id) {
-      throw new BadRequestException('Id is required');
-    }
-    return await this.contactService.findByPersonId(+id);
-  }
-
-  @Delete('/person/:id')
-  @ApiOperation({ summary: 'Delete all contacts by personId' })
-  @ApiOkResponse({
-    description: 'The contacts have been successfully deleted',
-  })
-  @ApiBadRequestResponse({ description: 'Id is required' })
-  @ApiNotFoundResponse({ description: 'Person not found' })
-  async removeByPersonId(@Param('id') id: number): Promise<string> {
-    if (!id) {
-      throw new BadRequestException('Id is required');
-    }
-    return await this.contactService.removeByPersonId(+id);
-  }
 }

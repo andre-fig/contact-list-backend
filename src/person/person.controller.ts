@@ -20,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger/dist/decorators';
 import { Person } from './entities/person.entity';
+import { Contact } from 'src/contact/entities/contact.entity';
 
 @ApiTags('person')
 @Controller('person')
@@ -96,5 +97,34 @@ export class PersonController {
       throw new BadRequestException('Id is required');
     }
     return await this.personService.remove(+id);
+  }
+
+  @Get(':id/contact')
+  @ApiOperation({ summary: 'Get all contacts by personId' })
+  @ApiOkResponse({
+    description: 'The contacts have been successfully retrieved',
+    type: [Contact],
+  })
+  @ApiBadRequestResponse({ description: 'Id is required' })
+  @ApiNotFoundResponse({ description: 'Person or contact not found' })
+  async findContacts(@Param('id') id: number): Promise<Contact[]> {
+    if (!id) {
+      throw new BadRequestException('Id is required');
+    }
+    return await this.personService.findContacts(+id);
+  }
+
+  @Delete(':id/contact')
+  @ApiOperation({ summary: 'Delete all contacts by personId' })
+  @ApiOkResponse({
+    description: 'The contacts have been successfully deleted',
+  })
+  @ApiBadRequestResponse({ description: 'Id is required' })
+  @ApiNotFoundResponse({ description: 'Person not found' })
+  async removeContacts(@Param('id') id: number): Promise<string> {
+    if (!id) {
+      throw new BadRequestException('Id is required');
+    }
+    return await this.personService.removeContacts(+id);
   }
 }
