@@ -7,7 +7,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
-import { ContactType } from '../dto/contact-type.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
@@ -26,13 +25,9 @@ export class Contact {
     example: 'phone',
     description: 'The type of a contact',
   })
-  @Column({
-    type: 'enum',
-    enum: ContactType,
-    default: ContactType.Phone,
-  })
+  @Column()
   @IsNotEmpty()
-  type: ContactType;
+  type: string;
 
   @ApiProperty({
     type: String,

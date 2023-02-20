@@ -16,7 +16,6 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 import { ContactService } from './contact.service';
-import { ContactType } from './dto/contact-type.enum';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { Contact } from './entities/contact.entity';
@@ -43,10 +42,6 @@ export class ContactController {
 
     if (!type || !value || !personId) {
       throw new BadRequestException('Type, value and personId are required');
-    }
-
-    if (!Object.values(ContactType).includes(type)) {
-      throw new BadRequestException('Type is not valid');
     }
 
     return await this.contactService.create(createContactDto);
